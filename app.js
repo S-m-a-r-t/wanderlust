@@ -9,6 +9,7 @@ const Listing = require('./models/listing.js');
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.urlencoded({ extended: true }));
 
 
 
@@ -54,4 +55,33 @@ app.get('/listings',  async(req, res) => {
   res.render('listings/listing.ejs', { listings });
 });
 
-// Route to get a single listing by ID
+
+
+// new listing route
+app.get('/listings/new', (req, res) => {
+  res.render('listings/listing_new.ejs');
+});
+
+app.post('/listings', async (req, res) => {
+  const { title, description, image, price, location, country } = req.body;
+
+  const listing = new Listing({
+    title,
+    description,
+    image,
+    price,
+    location,
+    country
+  });
+
+  await listing.save();
+  res.redirect('/listings');
+});
+
+// show Route 
+app.get('/listings/:id', async (req, res) => {
+  let {id}= req.params;
+  const listing = await Listing.findById(id);
+  res.render('listings/show.ejs', { listing });
+
+});
