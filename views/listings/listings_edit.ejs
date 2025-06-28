@@ -1,20 +1,39 @@
 <% layout('layouts/boilerplate') %>
 <body>
-    <h3>Edit Listing</h3>
-    <form action="/listings/<%= listing._id %>?_method=PUT" method="post">
-        <input type="text" name="title" placeholder="<%= listing.title %>" value="<%= listing.title %>" required>
-        <br>
-        <textarea name="description" placeholder="<%= listing.description %>" required><%= listing.description %></textarea>
-        <br>
-        <input type="text" name="image" placeholder="<%= listing.image %>" value="<%= listing.image %>">
-        <br>
-        <input type="number" name="price" placeholder="<%= listing.price %>" value="<%= listing.price %>" required>
-        <br>
-        <input type="text" name="location" placeholder="<%= listing.location %>" value="<%= listing.location %>" required>
-        <br>
-        <input type="text" name="country" placeholder="<%= listing.country %>" value="<%= listing.country %>" required>
-        <br>
-        <button type="submit">Update Listing</button>
-    </form>
-    
+    <div class="row mt-3">
+        <div class="col-8 offset-2">
+            <h3>Edit Listing</h3>
+            <form action="/listings/<%= listing._id %>?_method=PUT" method="post">
+
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input type="text" name="title" placeholder="<%= listing.title %>" value="<%= listing.title %>" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea name="description" placeholder="<%= listing.description %>" class="form-control" required><%= listing.description %></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="image" class="form-label">Image URL</label>
+                    <input type="text" name="image" placeholder="<%= listing.image %>" value="<%= listing.image %>" class="form-control">
+                </div>
+                <div class="row">
+                    <div class="mb-3 col-md-4">
+                        <label for="price" class="form-label">Price</label>
+                        <input type="number" name="price" placeholder="<%= listing.price %>" value="<%= listing.price %>" class="form-control" required>
+                    </div>
+                    <div class="mb-3 col-md-4">
+                        <label for="location" class="form-label">Location</label>
+                        <input type="text" name="location" placeholder="<%= listing.location %>" value="<%= listing.location %>" class="form-control" required>
+                    </div>
+                    <div class="mb-3 col-md-4">
+                        <label for="country" class="form-label">Country</label>
+                        <input type="text" name="country" placeholder="<%= listing.country %>" value="<%= listing.country %>" class="form-control" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-dark add-btn mt-3">Update Listing</button>
+            </form>
+        </div>
+    </div>
 </body>
