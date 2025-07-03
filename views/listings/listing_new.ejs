@@ -4,10 +4,11 @@
         <div class="col-8 offset-2">
             <br><br>
             <h3>Create a new listing</h3>
-            <form action="/listings" method="post">
+            <form action="/listings" method="post" novalidate class="needs-validation">
                 <div class="mb-3">
                     <label for="title" class="form-label">Title</label>
                     <input type="text" name="title" placeholder="Title" class="form-control" required>
+                    <div class="valid-feedback">looks good!!</div>
                 </div>
                 <div class="mb-3">
                     <label for="description" class="form-label">Description</label>

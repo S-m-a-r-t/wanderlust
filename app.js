@@ -7,7 +7,8 @@ const path = require('path');
 const Listing = require('./models/listing.js');
 const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
-
+const wrapAsync = require('./utils/wrapasync.js'); // Importing the wrapAsync utility
+const ExpressError = require('./utils/ExpressError.js'); // Importing the ExpressError class
 
 
 // middleware
@@ -69,21 +70,21 @@ app.get('/listings/new', (req, res) => {
   res.render('listings/listing_new.ejs');
 });
 
-app.post('/listings', async (req, res) => {
-  const { title, description, image, price, location, country } = req.body;
+app.post('/listings', wrapAsync(async (req, res) => {
+    const { title, description, image, price, location, country } = req.body;
 
-  const listing = new Listing({
-    title,
-    description,
-    image,
-    price,
-    location,
-    country
-  });
+    const listing = new Listing({
+      title,
+      description,
+      image,
+      price,
+      location,
+      country
+    });
 
-  await listing.save();
-  res.redirect('/listings');
-});
+    await listing.save();
+    res.redirect('/listings');
+}));
 
 // show Route 
 app.get('/listings/:id', async (req, res) => {
@@ -125,4 +126,8 @@ app.delete('/listings/:id', async (req, res) => {
   let {id} = req.params;
   await Listing.findByIdAndDelete(id);
   res.redirect('/listings');
+});
+
+app.use((err, req, res, next) => {
+  res.send("Something went wrong");
 });
