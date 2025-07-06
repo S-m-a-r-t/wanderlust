@@ -2,10 +2,7 @@ const mongoose = require('mongoose');
 
 
 const reviewSchema = mongoose.Schema({
-    comment: {
-        type : String,
-        required: true
-    },
+    comment: String,
     rating :{
         type : Number,
         min : 1,
@@ -17,6 +14,5 @@ const reviewSchema = mongoose.Schema({
     }
 });
 
-const reviews = mongoose.model("review" , reviewSchema);
 
-module.exports = reviews;
+module.exports =  mongoose.model("Review" , reviewSchema);
