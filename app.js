@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const ejs = require('ejs');
 const path = require('path');
 const Listing = require('./models/listing.js');
+const review = require('./models/review.js');
 const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
 const wrapAsync = require('./utils/wrapasync.js'); // Importing the wrapAsync utility
@@ -12,6 +13,7 @@ const wrapAsync = require('./utils/wrapasync.js'); // Importing the wrapAsync ut
 const ExpressError = require('./utils/ExpressError.js'); // Importing the ExpressError class
 const listings_schema = require("./vali_schema.js");
 const joi = require('joi');
+const reviews = require('./models/review.js');
 
 
 
@@ -111,6 +113,18 @@ app.get('/listings/:id/edit', wrapAsync(async (req, res) => {
   const listing = await Listing.findById(id);
   res.render('listings/listings_edit.ejs', { listing });
 }));
+
+//review add rout
+app.post('/listings/:id/reviews', async(req, res) => {
+  let listing = await Listing.findById(req.params.id);
+  let newreview = new reviews(req.params.review);
+  listing.review.push(newreview);
+
+  await newreview.save();
+  await listing.save();
+
+  res.redirect(`/listings/${req.params.id}`);
+})
 
 
 // update route
