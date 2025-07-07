@@ -13,6 +13,7 @@ const wrapAsync = require('./utils/wrapasync.js'); // Importing the wrapAsync ut
 const ExpressError = require('./utils/ExpressError.js'); // Importing the ExpressError class
 const listings_schema = require("./vali_schema.js");
 const joi = require('joi');
+const review = require('./models/review.js');
 
 
 
@@ -98,12 +99,15 @@ app.post('/listings', wrapAsync(async (req, res) => {
 }));
 
 // show Route 
-app.get('/listings/:id', wrapAsync(async (req, res) => {
-  let {id}= req.params;
-  const listing = await Listing.findById(id);
-  res.render('listings/show.ejs', { listing });
-
-}));
+app.get('/listings/:id', async (req, res) => {
+  try{
+    let {id}= req.params;
+    const listing = await Listing.findById(id).populate("review");
+    res.render('listings/show.ejs', { listing });
+  }catch(err){
+    console.log(err);
+  }
+});
 
 
 // edit route
@@ -129,6 +133,18 @@ app.post('/listings/:id/reviews', async(req, res) => {
   }catch(err){
     console.log(err);
   }
+});
+
+
+
+//reviews delete rout
+app.delete('/listings/:id/reviews/:reviewID' , async(req, res) =>{
+  let {id, reviewID} = req.params;
+  await Listing.findByIdAndUpdate(id , {$pull: {review: reviewID}});
+  await review.findByIdAndDelete(reviewID);
+
+  res.redirect(`/listings/${id}`);
+
 });
 
 
