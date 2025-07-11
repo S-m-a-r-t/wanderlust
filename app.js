@@ -4,17 +4,15 @@ const port = 3000;
 const mongoose = require('mongoose');
 const ejs = require('ejs');
 const path = require('path');
-const Listing = require('./models/listing.js');
-const Review = require('./models/review.js');
 const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
-const wrapAsync = require('./utils/wrapasync.js'); // Importing the wrapAsync utility
 const listings = require("./routes/listing_rout.js");
 const reviews = require("./routes/review_rout.js");
+const session = require('express-session');
+const flash = require('connect-flash');
 
 const ExpressError = require('./utils/ExpressError.js'); // Importing the ExpressError class
 const listings_schema = require("./vali_schema.js");
-const joi = require('joi');
 
 
 
@@ -25,6 +23,24 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, '/public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
+
+
+
+const sessionoption = {
+  secret : "mysecretstring",
+  resave : false,
+  saveUninitialized : true,
+  cookie: {
+    expires: Date.now()  + 7*24*60*60*1000,
+    maxAge: 7*24*60*60*1000,
+    httpOnly: true
+  }
+};
+
+app.use(session(sessionoption));
+app.use(flash());
+
+
 
 
 
@@ -47,6 +63,12 @@ async function main() {
 // }
 
 
+app.use((req, res, next)=>{
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
+  next();
+})
+
 //server code 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
@@ -56,6 +78,8 @@ app.get('/', (req, res) => {
   res.send("running good");
 });
 
+
+//define routes
 app.use("/listings" , listings);
 app.use("/listings/:id/reviews" , reviews);
 
