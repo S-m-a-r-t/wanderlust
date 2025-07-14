@@ -1,0 +1,23 @@
+const express = require('express');
+const router = express.Router({mergeParams: true});
+const User = require('../models/user.js'); 
+
+router.get('/signup', (req, res) => {
+  res.render('users/signup.ejs');
+});
+
+router.post('/signup', async (req, res) => {
+  try {
+    let { email, username, password } = req.body;
+    let newUser = new User({ email, username });
+    let registeredUser = await User.register(newUser, password);
+    console.log(registeredUser);
+    req.flash('success', 'Welcome to Wanderlust!');
+    res.redirect('/listings');
+  } catch (e) {
+    req.flash('error', e.message);
+    res.redirect('/signup');
+  }
+});
+
+module.exports = router;
