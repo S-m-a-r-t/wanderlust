@@ -4,14 +4,16 @@ const wrapAsync = require('../utils/wrapasync.js');
 const listings_schema = require("../vali_schema.js");
 const Listing = require('../models/listing.js');
 const Review = require('../models/review.js');
+const { islogedin ,isreviewauthor } = require('../middleware.js');
 
 
 
 //review add rout
-router.post('/', async(req, res) => {
+router.post('/',islogedin, async(req, res) => {
   try{
     let listing = await Listing.findById(req.params.id);
     let newreview = new Review(req.body.review);
+    newreview.author = res.locals.currentUser._id;
 
     listing.review.push(newreview);
 
@@ -28,7 +30,7 @@ router.post('/', async(req, res) => {
 
 
 //reviews delete rout
-router.delete('/:reviewID' , async(req, res) =>{
+router.delete('/:reviewID' ,islogedin,isreviewauthor, async(req, res) =>{
   let {id, reviewID} = req.params;
   await Listing.findByIdAndUpdate(id , {$pull: {review: reviewID}});
   await Review.findByIdAndDelete(reviewID);

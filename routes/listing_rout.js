@@ -5,6 +5,7 @@ const listings_schema = require("../vali_schema.js");
 const review = require('../models/review.js');
 const Listing = require('../models/listing.js');
 const { islogedin } = require('../middleware.js');
+const { isowner } = require('../middleware.js');
 
 
 // Route to get all listings
@@ -22,6 +23,7 @@ router.get('/new', islogedin, (req, res) => {
 
 router.post('/', wrapAsync(async (req, res) => {
     const { title, description, image, price, location, country } = req.body;
+    const userinfo = req.user._id;
 
     const listing = new Listing({
       title,
@@ -29,7 +31,8 @@ router.post('/', wrapAsync(async (req, res) => {
       image,
       price,
       location,
-      country
+      country,
+      owner: userinfo
     });
 
     await listing.save();
@@ -42,7 +45,7 @@ router.post('/', wrapAsync(async (req, res) => {
 router.get('/:id', async (req, res) => {
   try{
     let {id}= req.params;
-    const listing = await Listing.findById(id).populate("review");
+    const listing = await Listing.findById(id).populate({path: "review", populate: {path: "author"} }).populate("owner");
     if(!listing){
       req.flash("error", "Listing doesn't exist");
        return res.redirect('/listings');
@@ -63,10 +66,11 @@ router.get('/:id/edit',islogedin, wrapAsync(async (req, res) => {
 
 
 // update route
-router.put('/:id', wrapAsync(async (req, res) => {
+router.put('/:id',islogedin,isowner, wrapAsync(async (req, res) => {
   let {id} = req.params;
   const { title, description, image, price, location, country } = req.body;
 
+  
   await Listing.findByIdAndUpdate(id, {
     title,
     description,
