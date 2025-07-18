@@ -105,3 +105,34 @@ body{
 .btns{
     display: flex;
 }
+
+
+/* Container for the star rating */
+.star-rating {
+  display: flex;
+  flex-direction: row-reverse; /* This is the magic to make the hover work */
+  justify-content: flex-end;   /* Aligns stars to the left */
+  font-size: 2rem;             /* Adjust star size */
+  color: #d3d3d3;              /* Default star color (light gray) */
+}
+
+/* Hide the actual radio buttons */
+.star-rating input[type="radio"] {
+  display: none;
+}
+
+/* Style for the star labels */
+.star-rating label.star {
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+/* The magic part: */
+/* Colors the star on hover... */
+.star-rating label.star:hover,
+/* ...and all previous stars (because of flex-direction: row-reverse) */
+.star-rating label.star:hover ~ label.star,
+/* ...and colors the checked star and all previous stars */
+.star-rating input[type="radio"]:checked ~ label.star {
+  color: #ffc107; /* Gold color for selected/hovered stars */
+}
