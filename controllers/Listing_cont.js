@@ -9,7 +9,7 @@ module.exports.indexlistings = async(req, res) => {
   res.render('listings/listing.ejs', { listings });
 };
 
-module.exports.rendernewForm = islogedin,(req, res) => {
+module.exports.rendernewForm = (req, res) => {
   res.render('listings/listing_new.ejs');
 };
 
@@ -50,13 +50,13 @@ module.exports.newlisting = async (req, res) => {
 
 
 
-module.exports.editlisting = islogedin, wrapAsync(async (req, res) => {
+module.exports.editlisting =  async (req, res) => {
   let {id} = req.params;
   const listing = await Listing.findById(id);
   res.render('listings/listings_edit.ejs', { listing });
-});
+};
 
-module.exports.updatelisting = islogedin,isowner, wrapAsync(async (req, res) => {
+module.exports.updatelisting = async (req, res) => {
   let {id} = req.params;
   const { title, description, image, price, location, country } = req.body;
 
@@ -71,13 +71,13 @@ module.exports.updatelisting = islogedin,isowner, wrapAsync(async (req, res) => 
   }, {  new: true });
   req.flash("success", "Listing Updated Successfully!")
   res.redirect(`/listings/${id}`);
-});
+};
 
 
 
-module.exports.deletelisting = islogedin, wrapAsync(async (req, res) => {
+module.exports.deletelisting = async (req, res) => {
   let {id} = req.params;
   await Listing.findByIdAndDelete(id);
   req.flash("success", "Listing deleted Successfully!")
   res.redirect('/listings');
-});
+};

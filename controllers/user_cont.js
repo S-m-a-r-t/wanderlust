@@ -33,7 +33,7 @@ module.exports.loginform = (req, res) => {
 };
 
 
-module.exports.login = saveredirecturl, passport.authenticate('local',{failureRedirect: "/login", failureFlash: true}), async(req, res) => {
+module.exports.loginmain =  async(req, res) => {
   req.flash('success', 'Welcome to wanderlust!');
   res.redirect(res.locals.redirecturl || '/listings');
 };

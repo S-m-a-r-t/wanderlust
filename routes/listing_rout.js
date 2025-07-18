@@ -9,25 +9,21 @@ const { isowner } = require('../middleware.js');
 const listing_conteroller = require('../controllers/Listing_cont.js');
 
 
-// Route to get all listings
-router.get('/',  wrapAsync(listing_conteroller.indexlistings));
+
+router.route('/')
+.get(wrapAsync(listing_conteroller.indexlistings))
+.post(wrapAsync(listing_conteroller.newlisting));
 
 // new listing route
 router.get('/new', islogedin, listing_conteroller.rendernewForm);
-router.post('/', wrapAsync(listing_conteroller.newlisting));
 
-// show Route 
-router.get('/:id', listing_conteroller.showlisting );
+router.route('/:id')
+.get( listing_conteroller.showlisting )
+.put( islogedin,isowner, wrapAsync(listing_conteroller.updatelisting) )
+.delete( islogedin, wrapAsync( listing_conteroller.deletelisting ) );
 
 // edit route
-router.get('/:id/edit',listing_conteroller.editlisting);
-
-// update route
-router.put('/:id',listing_conteroller.updatelisting);
-
-// delete route
-router.delete('/:id',listing_conteroller.deletelisting);
-
+router.get('/:id/edit', islogedin, wrapAsync(listing_conteroller.editlisting));
 
 
 module.exports = router;
