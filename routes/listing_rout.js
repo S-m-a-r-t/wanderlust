@@ -7,12 +7,26 @@ const Listing = require('../models/listing.js');
 const { islogedin } = require('../middleware.js');
 const { isowner } = require('../middleware.js');
 const listing_conteroller = require('../controllers/Listing_cont.js');
+const multer  = require('multer');
+const upload = multer({ dest: 'uploads/' });
 
 
 
 router.route('/')
 .get(wrapAsync(listing_conteroller.indexlistings))
-.post(wrapAsync(listing_conteroller.newlisting));
+// .post(upload.single('listing.image'), listing_conteroller.newlisting);
+
+
+.post(upload.single('image'), (req, res) => {
+  try{
+    console.log(req.file);
+    console.log(req.body);
+    res.send(req.file);
+  }catch(err){
+    console.log(err);
+  }
+});
+
 
 // new listing route
 router.get('/new', islogedin, listing_conteroller.rendernewForm);
