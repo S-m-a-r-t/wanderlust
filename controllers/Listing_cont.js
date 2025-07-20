@@ -31,6 +31,8 @@ module.exports.showlisting = async (req, res) => {
 
 module.exports.newlisting = async (req, res) => {
     const { title, description, image, price, location, country } = req.body;
+    let url = req.file.path;
+    let filename = req.file.filename;
     const userinfo = req.user._id;
 
     const listing = new Listing({
@@ -42,6 +44,7 @@ module.exports.newlisting = async (req, res) => {
       country,
       owner: userinfo
     });
+    listing.image = {url, filename};
 
     await listing.save();
     req.flash("success", "New listing Created!")
