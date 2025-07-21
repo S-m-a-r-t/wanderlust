@@ -56,7 +56,12 @@ module.exports.newlisting = async (req, res) => {
 module.exports.editlisting =  async (req, res) => {
   let {id} = req.params;
   const listing = await Listing.findById(id);
-  res.render('listings/listings_edit.ejs', { listing });
+
+
+  let org_url = listing.image.url;
+  let final_url = org_url.replace("/upload", "/upload/h_300,w_250/");
+  req.flash("error", "your listing doesn't exist");
+  res.render('listings/listings_edit.ejs', { listing, final_url });
 };
 
 module.exports.updatelisting = async (req, res) => {
@@ -64,7 +69,7 @@ module.exports.updatelisting = async (req, res) => {
   const { title, description, image, price, location, country } = req.body;
 
   
-  await Listing.findByIdAndUpdate(id, {
+  let updatedlisting = await Listing.findByIdAndUpdate(id, {
     title,
     description,
     image,
@@ -72,6 +77,14 @@ module.exports.updatelisting = async (req, res) => {
     location,
     country
   }, {  new: true });
+
+  if(typeof req.file !== 'undefined' && req.file !== null) {
+    let url = req.file.path;
+    let filename = req.file.filename;
+    updatedlisting.image = {url, filename};
+    await updatedlisting.save();
+  }
+
   req.flash("success", "Listing Updated Successfully!")
   res.redirect(`/listings/${id}`);
 };

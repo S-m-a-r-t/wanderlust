@@ -23,7 +23,7 @@ router.get('/new', islogedin, listing_conteroller.rendernewForm);
 
 router.route('/:id')
 .get( listing_conteroller.showlisting )
-.put( islogedin,isowner, wrapAsync(listing_conteroller.updatelisting) )
+.put( islogedin, isowner, upload.single('image'), wrapAsync(listing_conteroller.updatelisting) )
 .delete( islogedin, wrapAsync( listing_conteroller.deletelisting ) );
 
 // edit route
