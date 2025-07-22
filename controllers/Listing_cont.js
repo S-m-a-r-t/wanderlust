@@ -2,6 +2,7 @@ const Listing = require('../models/listing.js');
 const { islogedin } = require('../middleware.js');
 const { isowner } = require('../middleware.js');
 const wrapAsync = require('../utils/wrapasync.js');
+const axios = require('axios');
 
 
 module.exports.indexlistings = async(req, res) => {
@@ -22,7 +23,13 @@ module.exports.showlisting = async (req, res) => {
       req.flash("error", "Listing doesn't exist");
        return res.redirect('/listings');
     }
-    res.render('listings/show.ejs', { listing });
+    const query = encodeURIComponent(listing.location + ', ' + listing.country);
+    const apiKey = process.env.MAP_KEY; // store it safely in .env
+    const geoURL = `https://api.maptiler.com/geocoding/${query}.json?key=${apiKey}`;
+
+    const geoResponse = await axios.get(geoURL);
+    const coordinates = geoResponse.data?.features?.[0]?.geometry?.coordinates;
+    res.render('listings/show.ejs', { listing, coordinates });
   }catch(err){
     console.log(err);
   }

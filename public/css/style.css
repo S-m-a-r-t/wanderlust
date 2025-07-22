@@ -136,3 +136,10 @@ body{
 .star-rating input[type="radio"]:checked ~ label.star {
   color: #ffc107; /* Gold color for selected/hovered stars */
 }
+
+
+
+#map {
+  height: 400px;
+  width: 80vh;
+}
