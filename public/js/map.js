@@ -1,4 +1,3 @@
-
 let api_Key = MAP_api_Key ;
 maptilersdk.config.apiKey = api_Key; // Set your MapTiler API key here
 const map = new maptilersdk.Map({
@@ -7,3 +6,8 @@ style: maptilersdk.MapStyle.STREETS,
 center: coord, // starting position [lng, lat]
 zoom: 8 // starting zoom
 });
+const marker = new maptilersdk.Marker({
+  color: "#fe424d",
+  draggable: true
+}).setLngLat(coord) // Use your desired [lng, lat] coordinates
+.addTo(map);
