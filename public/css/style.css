@@ -1,145 +1,250 @@
-body{
-    font-family: "Plus Jakarta Sans", sans-serif !important;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+/* ========================
+   1. THEME VARIABLES 
+   ======================== */
+:root {
+  /* Light Theme (Default) */
+  --primary-color: #fe424d;
+  --background-color: #ffffff;
+  --text-color: #222222;
+  --surface-color: #ffffff; /* For cards, navbar, etc. */
+  --footer-bg-color: #ebebeb;
+  --card-overlay-color: rgba(255, 255, 255, 0.2);
 }
 
-.container{
-    flex: 1;
+body.dark-mode {
+  /* Dark Theme */
+  --background-color: #121212;
+  --text-color: #e0e0e0;
+  --surface-color: #121212;
+  --footer-bg-color: #1a1a1a;
+  --card-overlay-color: rgba(0, 0, 0, 0.3);
 }
 
+/* ========================
+   2. GENERAL STYLES 
+   ======================== */
+body {
+  font-family: "Plus Jakarta Sans", sans-serif !important;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.container {
+  flex: 1;
+}
+
+/* ========================
+   3. NAVBAR
+   ======================== */
 .navbar {
-    height: 5rem;
-    background-color: white;
+  height: 5rem;
+  background-color: var(--surface-color);
+  border-bottom: 1px solid var(--footer-bg-color); /* Added for better separation in dark mode */
+  transition: background-color 0.3s;
 }
 
-.fa-compass{
-    color: #fe424d;
-    font-size: 2rem;
+.fa-compass {
+  color: var(--primary-color);
+  font-size: 2rem;
 }
 
-.nav-link{
-    color: #222222 !important;
-
+.nav-link {
+  color: var(--text-color) !important;
 }
 
-/* footer */
-
-.f_info_links a{
-    text-decoration: none;
-    color: #222222 !important;
+/* ========================
+   4. CARDS
+   ======================== */
+.listing-card {
+  border: none !important;
+  margin-bottom: 2rem;
+  background-color: var(--surface-color); /* Added for dark mode */
 }
 
-.f_info_links a:hover{
-    text-decoration: underline;
-}   
-
-.f_info_links ,.f-info-socials ,.f-info-brand{
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.card-img-top {
+  border-radius: 15px;
+  width: 100% !important;
+  object-fit: cover !important;
 }
 
+.card-body {
+  padding: 0 !important;
+}
+
+.card-text {
+  font-weight: 400 !important;
+  color: var(--text-color);
+}
+
+.review-text {
+    font-weight: 400 !important;
+    color: black;
+}
+
+.listing-link {
+  text-decoration: none !important;
+}
+
+.card-img-overlay {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.card-img-overlay:hover {
+  opacity: 1;
+  background-color: var(--card-overlay-color);
+}
+
+.add-btn {
+  background-color: var(--primary-color) !important;
+  border: none !important;
+}
+
+/* ========================
+   5. SHOW PAGE & BUTTONS
+   ======================== */
+.show-img {
+  height: 30vh;
+}
+
+.btns {
+  display: flex;
+}
+
+/* ========================
+   6. FOOTER
+   ======================== */
+.f-info {
+  text-align: center;
+  height: 8rem;
+  background-color: var(--footer-bg-color);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center; /* Changed from space-evenly */
+  transition: background-color 0.3s;
+}
+
+.f_info_links a {
+  text-decoration: none;
+  color: var(--text-color) !important;
+}
+
+.f_info_links a:hover {
+  text-decoration: underline;
+}
+
+.f_info_links,
+.f-info-socials,
+.f-info-brand {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 .f-info-socials i {
-    font-size: 1.2rem;
-    margin-right: 1rem;
+  font-size: 1.2rem;
+  margin-right: 1rem;
+  color: var(--text-color);
 }
 
-
-.f-info{
-    text-align: center;
-    height: 8rem;
-    background-color: lightgray;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: space-evenly;
+/* ========================
+   7. MAP & STAR RATING (Unchanged)
+   ======================== */
+#map {
+  height: 400px;
+  width: 80vh;
 }
 
-/* cards */
-.listing-card{
-    border: none !important;
-    margin-bottom: 2rem;
-}
-
-.card-img-top{
-    border-radius: 15px;
-    width: 100% !important;
-    object-fit: cover !important;
-} 
-
-.card-body{
-    padding: 0 !important;
-}
-
-.card-text{
-    font-weight: 400 !important;
-}
-
-.listing-link{
-    text-decoration: none !important;
-}
-
-.card-img-overlay{
-    opacity: 0;
-
-}
-.card-img-overlay:hover{
-    opacity: 0.2;
-    background-color: white;
-}
-
-.add-btn{
-    background-color: #fe424d !important;
-    border: none !important;
-}
-
-.show-img{
-    height: 30vh;
-
-}
-
-.btns{
-    display: flex;
-}
-
-
-/* Container for the star rating */
 .star-rating {
   display: flex;
-  flex-direction: row-reverse; /* This is the magic to make the hover work */
-  justify-content: flex-end;   /* Aligns stars to the left */
-  font-size: 2rem;             /* Adjust star size */
-  color: #d3d3d3;              /* Default star color (light gray) */
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  font-size: 2rem;
+  color: #d3d3d3;
 }
-
-/* Hide the actual radio buttons */
 .star-rating input[type="radio"] {
   display: none;
 }
-
-/* Style for the star labels */
 .star-rating label.star {
   cursor: pointer;
   transition: color 0.2s;
 }
-
-/* The magic part: */
-/* Colors the star on hover... */
 .star-rating label.star:hover,
-/* ...and all previous stars (because of flex-direction: row-reverse) */
 .star-rating label.star:hover ~ label.star,
-/* ...and colors the checked star and all previous stars */
 .star-rating input[type="radio"]:checked ~ label.star {
-  color: #ffc107; /* Gold color for selected/hovered stars */
+  color: #ffc107;
+}
+
+/* ========================
+   8. THEME TOGGLE SWITCH
+   ======================== */
+.checkbox {
+  opacity: 0;
+  position: absolute;
+}
+
+.checkbox-label {
+  background-color: #111;
+  width: 50px;
+  height: 26px;
+  border-radius: 50px;
+  position: relative;
+  padding: 5px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fa-moon {
+  color: #f1c40f;
+}
+.fa-sun {
+  color: #f39c12;
+}
+
+.checkbox-label .ball {
+  background-color: white;
+  width: 22px;
+  height: 22px;
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  border-radius: 50%;
+  transition: transform 0.2s linear;
+}
+
+.checkbox:checked + .checkbox-label .ball {
+  transform: translateX(24px);
 }
 
 
+.btn-search{
+  background-color:#fe424d ;
+  color: white;
+  border-radius: 25px;
+  padding: 0 1rem 0 1rem;
+}
 
-#map {
-  height: 400px;
-  width: 80vh;
+.btn-search:hover{
+  background-color:#fe424d ;
+  color: white;
+  border-radius: 25px;
+  padding: 0 1rem 0 1rem;
+}
+
+.btn-search i {
+  display: inline;
+  margin-right: 0.5rem;
+}
+
+.search_input{
+  border: 1px solid #fe424d;
+  border-radius: 25px;
+  padding: 0.5rem 2rem 0.5rem 3.5rem;
 }

@@ -86,12 +86,12 @@ app.use((req, res, next)=>{
 
 //server code 
 app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+  console.log(`Server is running on http://localhost:${port}/listings`);
 });
 
-app.get('/', (req, res) => {
-  res.send("running good");
-});
+// app.get('/', (req, res) => {
+//   res.send("running good");
+// });
 
 
 
