@@ -19,6 +19,8 @@ const flash = require('connect-flash');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const User = require('./models/user.js'); 
+const MongoStore = require('connect-mongo');
+const dbUrl = process.env.ATLAS_DB_URL; // MongoDB connection URL
 
 const ExpressError = require('./utils/ExpressError.js'); // Importing the ExpressError class
 const listings_schema = require("./vali_schema.js");
@@ -33,15 +35,27 @@ app.use(express.static(path.join(__dirname, '/public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 
+const store = MongoStore.create({
+  mongoUrl: dbUrl,
+  crypto: {
+    secret: process.env.SECRET,
+  },
+  touchAfter: 24 * 3600,// time in seconds
+});
+
+store.on("error", function(e){
+  console.log("Session store error", e);
+});
 
 
 const sessionoption = {
-  secret : "mysecretstring",
-  resave : false,
-  saveUninitialized : true,
+  store: store,
+  secret: process.env.SECRET,
+  resave: false,
+  saveUninitialized: true,
   cookie: {
-    expires: Date.now()  + 7*24*60*60*1000,
-    maxAge: 7*24*60*60*1000,
+    expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+    maxAge: 7 * 24 * 60 * 60 * 1000,
     httpOnly: true
   }
 };
@@ -58,15 +72,19 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 
-// connect to db 
+
+//connect to db
+async function main() {
+  await mongoose.connect(dbUrl);
+}
+
+
 main().then(() => {
   console.log('Connected to MongoDB');
 })
 .catch(err => console.log(err));
 
-async function main() {
-  await mongoose.connect('mongodb://127.0.0.1:27017/wanderlust');
-}
+
 
 // const validatelisting = (req , res , next)=>{
 //   let result = listings_schema.validate(req.body);
