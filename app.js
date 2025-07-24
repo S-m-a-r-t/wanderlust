@@ -107,9 +107,9 @@ app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}/listings`);
 });
 
-// app.get('/', (req, res) => {
-//   res.send("running good");
-// });
+app.get('/', (req, res) => {
+  res.redirect('/listings');
+});
 
 
 
